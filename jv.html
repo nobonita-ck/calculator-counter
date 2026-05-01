@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator + Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .calculator, .timer {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+            width: 300px;
+        }
+        .display {
+            width: 100%;
+            height: 50px;
+            font-size: 22px;
+            text-align: right;
+            margin-bottom: 15px;
+            padding: 5px;
+        }
+        .btn {
+            width: 65px;
+            height: 50px;
+            margin: 5px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #3498db;
+            color: white;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+        .equal {
+            background: #27ae60;
+        }
+        .equal:hover {
+            background: #1e8449;
+        }
+        .clear {
+            background: #e74c3c;
+        }
+        .clear:hover {
+            background: #c0392b;
+        }
+        .time-display {
+            font-size: 40px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .timer button {
+            width: 80px;
+            height: 45px;
+            margin: 5px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #8e44ad;
+            color: white;
+            font-size: 16px;
+        }
+        .timer button:hover {
+            background: #6c3483;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculator and Timer Counter</h1>
+    <div class="container">
+        <div class="calculator">
+            <h2>Calculator</h2>
+            <input type="text" id="calcDisplay" class="display" readonly>
+            <div>
+                <button class="btn" onclick="appendValue('7')">7</button>
+                <button class="btn" onclick="appendValue('8')">8</button>
+                <button class="btn" onclick="appendValue('9')">9</button>
+                <button class="btn" onclick="appendValue('/')">/</button>
+            </div>
+            <div>
+                <button class="btn" onclick="appendValue('4')">4</button>
+                <button class="btn" onclick="appendValue('5')">5</button>
+                <button class="btn" onclick="appendValue('6')">6</button>
+                <button class="btn" onclick="appendValue('*')">*</button>
+            </div>
+            <div>
+                <button class="btn" onclick="appendValue('1')">1</button>
+                <button class="btn" onclick="appendValue('2')">2</button>
+                <button class="btn" onclick="appendValue('3')">3</button>
+                <button class="btn" onclick="appendValue('-')">-</button>
+            </div>
+            <div>
+                <button class="btn" onclick="appendValue('0')">0</button>
+                <button class="btn clear" onclick="clearDisplay()">C</button>
+                <button class="btn equal" onclick="calculate()">=</button>
+                <button class="btn" onclick="appendValue('+')">+</button>
+            </div>
+        </div>
+        <!-- Timer -->
+        <div class="timer">
+            <h2>Timer Counter</h2>
+            <div id="time" class="time-display">00:00</div>
+
+            <button onclick="startTimer()">Start</button>
+            <button onclick="stopTimer()">Stop</button>
+            <button onclick="resetTimer()">Reset</button>
+        </div>
+    </div>
+    <script>
+        function appendValue(value) {
+            document.getElementById("calcDisplay").value += value;
+        }
+
+        function clearDisplay() {
+            document.getElementById("calcDisplay").value = "";
+        }
+
+        function calculate() {
+            let display = document.getElementById("calcDisplay");
+            try {
+                display.value = eval(display.value);
+            } catch {
+                display.value = "Error";
+            }
+        }
+        let seconds = 0;
+        let timerInterval;
+
+        function updateTimer() {
+            let mins = Math.floor(seconds / 60);
+            let secs = seconds % 60;
+
+            document.getElementById("time").innerText =
+                String(mins).padStart(2, '0') + ":" +
+                String(secs).padStart(2, '0');
+        }
+        function startTimer() {
+            if (!timerInterval) {
+                timerInterval = setInterval(() => {
+                    seconds++;
+                    updateTimer();
+                }, 1000);
+            }
+        }
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+        function resetTimer() {
+            stopTimer();
+            seconds = 0;
+            updateTimer();
+        }
+    </script>
+</body>
+</html>
